@@ -356,7 +356,7 @@ def hello_world():
     # file = request.files['file']
     # print("file", file)
     # file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'file.wav'))
-    wav_path = "./files/voirie.wav"  # path to your audio file
+    wav_path = "./files/b.wav"  # path to your audio file
     waveform, sample_rate = torchaudio.load(wav_path)
     waveform = waveform.squeeze(axis=0)  # mono
     # resample for comparate models

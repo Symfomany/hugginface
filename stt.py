@@ -49,22 +49,25 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device, "Device")
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+# os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 # torchaudio.set_audio_backend("soundfile")
 
 """
     Loading Model
 """
-# 2200 hours of French
-print("Loading Model from Hugging face...")
-model = AutoModelForCTC.from_pretrained(
-    "bofenghuang/asr-wav2vec2-ctc-french").to(device)
-processor = Wav2Vec2Processor.from_pretrained(
-    "bofenghuang/asr-wav2vec2-ctc-french")
-model_sample_rate = processor.feature_extractor.sampling_rate
-print("Loaded Model ! ")
+try:
+    # 2200 hours of French
+    print("Loading Model from Hugging face...")
+    model = AutoModelForCTC.from_pretrained(
+        "bofenghuang/asr-wav2vec2-ctc-french").to(device)
+    processor = Wav2Vec2Processor.from_pretrained(
+        "bofenghuang/asr-wav2vec2-ctc-french")
+    model_sample_rate = processor.feature_extractor.sampling_rate
+    print("Loaded Model ! ")
+except BaseException as e:
+    print('Failed to do something: ' + str(e))
 
 
 @app.route('/test',  methods=['GET'])
@@ -356,7 +359,7 @@ def hello_world():
     # file = request.files['file']
     # print("file", file)
     # file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'file.wav'))
-    wav_path = "./files/b.wav"  # path to your audio file
+    wav_path = "./files/s.wav"  # path to your audio file
     waveform, sample_rate = torchaudio.load(wav_path)
     waveform = waveform.squeeze(axis=0)  # mono
     # resample for comparate models

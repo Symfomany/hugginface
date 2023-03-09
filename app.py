@@ -57,17 +57,17 @@ print(device, "Device")
 """
     Loading Model
 """
-try:
-    # 2200 hours of French
-    print("Loading Model from Hugging face...")
-    model = AutoModelForCTC.from_pretrained(
-        "bofenghuang/asr-wav2vec2-ctc-french").to(device)
-    processor = Wav2Vec2Processor.from_pretrained(
-        "bofenghuang/asr-wav2vec2-ctc-french")
-    model_sample_rate = processor.feature_extractor.sampling_rate
-    print("Loaded Model ! ")
-except BaseException as e:
-    print('Failed to do something: ' + str(e))
+# try:
+#     # 2200 hours of French
+#     print("Loading Model from Hugging face...")
+#     model = AutoModelForCTC.from_pretrained(
+#         "bofenghuang/asr-wav2vec2-ctc-french").to(device)
+#     processor = Wav2Vec2Processor.from_pretrained(
+#         "bofenghuang/asr-wav2vec2-ctc-french")
+#     model_sample_rate = processor.feature_extractor.sampling_rate
+#     print("Loaded Model ! ")
+# except BaseException as e:
+#     print('Failed to do something: ' + str(e))
 
 
 @app.route('/test',  methods=['GET'])
@@ -354,58 +354,58 @@ dict = {
 #     return "Ok"
 
 
-@app.route('/',  methods=['POST'])
-def hello_world():
-    # file = request.files['file']
-    # print("file", file)
-    # file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'file.wav'))
-    wav_path = "./files/s.wav"  # path to your audio file
-    waveform, sample_rate = torchaudio.load(wav_path)
-    waveform = waveform.squeeze(axis=0)  # mono
-    # resample for comparate models
-    # if sample_rate != model_sample_rate:
-    #     resampler = torchaudio.transforms.Resample(
-    #         sample_rate, model_sample_rate)
-    #     waveform = resampler(waveform)
+# @app.route('/',  methods=['POST'])
+# def hello_world():
+#     # file = request.files['file']
+#     # print("file", file)
+#     # file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'file.wav'))
+#     wav_path = "./files/s.wav"  # path to your audio file
+#     waveform, sample_rate = torchaudio.load(wav_path)
+#     waveform = waveform.squeeze(axis=0)  # mono
+#     # resample for comparate models
+#     # if sample_rate != model_sample_rate:
+#     #     resampler = torchaudio.transforms.Resample(
+#     #         sample_rate, model_sample_rate)
+#     #     waveform = resampler(waveform)
 
-    # normalize
-    input_dict = processor(
-        waveform, sampling_rate=model_sample_rate, return_tensors="pt")
+#     # normalize
+#     input_dict = processor(
+#         waveform, sampling_rate=model_sample_rate, return_tensors="pt")
 
-    with torch.inference_mode():
-        logits = model(input_dict.input_values.to(device)).logits
+#     with torch.inference_mode():
+#         logits = model(input_dict.input_values.to(device)).logits
 
-    # predicted_sentence = processor.batch_decode(
-    #     logits.cpu().numpy()).text[0]
+#     # predicted_sentence = processor.batch_decode(
+#     #     logits.cpu().numpy()).text[0]
 
-    predicted_ids = torch.argmax(logits, dim=-1)
-    predicted_sentence = processor.batch_decode(predicted_ids)[0]
+#     predicted_ids = torch.argmax(logits, dim=-1)
+#     predicted_sentence = processor.batch_decode(predicted_ids)[0]
 
-    sentence = ""
-    predicted_sentence = predicted_sentence.lower()
-    print(predicted_sentence, "prediction")
+#     sentence = ""
+#     predicted_sentence = predicted_sentence.lower()
+#     print(predicted_sentence, "prediction")
 
-    # ph = predicted_sentence.replace("no du lot", "")
-    # ph = predicted_sentence.replace("et", "")
-    # ph = predicted_sentence.replace("le", "")
-    # ph = predicted_sentence.replace("du", "")
+#     # ph = predicted_sentence.replace("no du lot", "")
+#     # ph = predicted_sentence.replace("et", "")
+#     # ph = predicted_sentence.replace("le", "")
+#     # ph = predicted_sentence.replace("du", "")
 
-    # for word in ph.split():
-    #     if len(word) > 2:
-    #         try:
-    #             alpha = w2n.word_to_num(word)
-    #             sentence += " " + str(alpha)
-    #         except Exception as e:
-    #             print("Nan")
-    #             # print(str(e))
-    #     else:
-    #         print("word", word)
-    #         if word in dict.keys():
-    #             word = dict[word]
-    #         elif len(word) == 2:
-    #             word = word[0] + " " + word[1]
-    #         sentence += " " + word.upper()
-    return predicted_sentence
+#     # for word in ph.split():
+#     #     if len(word) > 2:
+#     #         try:
+#     #             alpha = w2n.word_to_num(word)
+#     #             sentence += " " + str(alpha)
+#     #         except Exception as e:
+#     #             print("Nan")
+#     #             # print(str(e))
+#     #     else:
+#     #         print("word", word)
+#     #         if word in dict.keys():
+#     #             word = dict[word]
+#     #         elif len(word) == 2:
+#     #             word = word[0] + " " + word[1]
+#     #         sentence += " " + word.upper()
+#     return predicted_sentence
 
 
 if __name__ == "__main__":

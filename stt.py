@@ -22,22 +22,22 @@ import os.path
 # import sounddevice as sd
 # from scipy.io.wavfile import write
 
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 16000
-CHUNK = 1024
-RECORD_SECONDS = 30
+# FORMAT = pyaudio.paInt16
+# CHANNELS = 1
+# RATE = 16000
+# CHUNK = 1024
+# RECORD_SECONDS = 30
 
-fs = 16000  # Sample rate
-seconds = 3  # Duration of recording
+# fs = 16000  # Sample rate
+# seconds = 3  # Duration of recording
 
-WAVE_OUTPUT_FILENAME = "./files/dataset/file.wav"
+# WAVE_OUTPUT_FILENAME = "./files/dataset/file.wav"
 
-audio = pyaudio.PyAudio()
+# audio = pyaudio.PyAudio()
 # print(audio, "audio !!!")
 # print(FORMAT, CHANNELS, RATE, CHUNK, "CHUNK")
 
-os.environ['w2n.lang'] = 'fr'
+# os.environ['w2n.lang'] = 'fr'
 UPLOAD_FOLDER = './files'
 
 app = Flask(__name__)
